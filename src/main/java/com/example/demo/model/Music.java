@@ -17,6 +17,6 @@ public class Music {
     private Long id;
 
     private String name;
-    
+
     private Float rating;
 }

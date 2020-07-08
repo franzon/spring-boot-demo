@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 public class ApiError {
     private HttpStatus status;
     private String message;
-    private String debugMessage;
+    private List<String> subErrors;
 
     public ApiError(HttpStatus status) {
         this.status = status;
@@ -18,12 +21,10 @@ public class ApiError {
     public ApiError(HttpStatus status, Throwable ex) {
         this.status = status;
         this.message = "Unexpected error";
-        this.debugMessage = ex.getLocalizedMessage();
     }
 
     public ApiError(HttpStatus status, String message, Throwable ex) {
         this.status = status;
         this.message = message;
-        this.debugMessage = ex.getLocalizedMessage();
     }
 }

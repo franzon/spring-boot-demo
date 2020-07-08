@@ -32,7 +32,6 @@ public class UserService implements UserDetailsService {
         return user.isPresent();
     }
 
-
     public User signUp(SignUpRequestDto user) {
         if (isEmailAlreadyUsed(user.getEmail())) {
             throw new EmailAlreadyUsedException(user.getEmail());
