@@ -24,9 +24,4 @@ public class UserController {
         SignUpResponseDto response = new SignUpResponseDto(newUser.getId(), newUser.getEmail());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<String> authenticatedRouteTest() {
-        return new ResponseEntity<String>(HttpStatus.OK);
-    }
 }

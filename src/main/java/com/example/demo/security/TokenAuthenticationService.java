@@ -45,7 +45,7 @@ public class TokenAuthenticationService {
                 return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
             }
         }
-        
+
         return null;
     }
 }
