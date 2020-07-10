@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.exception.AccessDeniedException;
+import com.example.demo.model.Music;
 import com.example.demo.model.Playlist;
 import com.example.demo.model.User;
+import com.example.demo.service.MusicService;
 import com.example.demo.service.PlaylistService;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class PlaylistController {
     private final PlaylistService playlistService;
     private final UserService userService;
+    private final MusicService musicService;
 
     @PostMapping("")
     public ResponseEntity<CreatePlaylistResponseDto> createPlaylist(@Valid @RequestBody CreatePlaylistRequestDto playlist, Principal principal) {
@@ -66,5 +70,27 @@ public class PlaylistController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/music/{musicId}")
+    public ResponseEntity<AddMusicToPlaylistResponseDto> addMusicToPlaylist(@PathVariable("id") Long playlistId,
+                                                                            @PathVariable("musicId") Long musicId,
+                                                                            Principal principal) {
+
+        User user = userService.loadUserByUsername(principal.getName());
+
+        Playlist playlist = playlistService.getPlaylistById(playlistId);
+
+        if (!playlistService.isPlaylistOwnedByUser(playlist, user)) {
+            throw new AccessDeniedException();
+        }
+
+        Music music = musicService.getMusicById(musicId);
+
+        playlistService.addMusicToPlaylist(playlist, music);
+
+        AddMusicToPlaylistResponseDto response = new AddMusicToPlaylistResponseDto(playlistId, musicId, new Date());
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

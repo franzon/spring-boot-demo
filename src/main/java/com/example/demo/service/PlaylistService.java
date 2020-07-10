@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.CreatePlaylistRequestDto;
 import com.example.demo.dto.UpdatePlaylistRequestDto;
 import com.example.demo.exception.PlaylistNotFoundException;
+import com.example.demo.model.Music;
 import com.example.demo.model.Playlist;
 import com.example.demo.model.User;
 import com.example.demo.respository.PlaylistRepository;
@@ -43,5 +44,10 @@ public class PlaylistService {
 
     public List<Playlist> listPlaylistsFromUser(User user) {
         return playlistRepository.findByUser(user);
+    }
+
+    public void addMusicToPlaylist(Playlist playlist, Music music) {
+        playlist.getMusics().add(music);
+        playlistRepository.save(playlist);
     }
 }

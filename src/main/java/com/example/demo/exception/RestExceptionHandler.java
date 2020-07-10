@@ -1,5 +1,6 @@
 package com.example.demo.exception;
 
+import com.example.demo.model.Music;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +42,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PlaylistNotFoundException.class)
     protected  ResponseEntity<Object> handlePlaylistNotFound(PlaylistNotFoundException ex) {
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND);
+        error.setMessage(ex.getMessage());
+
+        return buildResponseEntity(error);
+    }
+
+    @ExceptionHandler(MusicNotFoundException.class)
+    protected  ResponseEntity<Object> handleMusicNotFound(MusicNotFoundException ex) {
         ApiError error = new ApiError(HttpStatus.NOT_FOUND);
         error.setMessage(ex.getMessage());
 
