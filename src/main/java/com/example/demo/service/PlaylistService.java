@@ -9,6 +9,7 @@ import com.example.demo.respository.PlaylistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,9 @@ public class PlaylistService {
     public Playlist updatePlaylist(Playlist playlist, UpdatePlaylistRequestDto newData) {
         playlist.setDescription(newData.getDescription());
         return playlistRepository.save(playlist);
+    }
+
+    public List<Playlist> listPlaylistsFromUser(User user) {
+        return playlistRepository.findByUser(user);
     }
 }

@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.CreatePlaylistRequestDto;
-import com.example.demo.dto.CreatePlaylistResponseDto;
-import com.example.demo.dto.UpdatePlaylistRequestDto;
-import com.example.demo.dto.UpdatePlaylistResponseDto;
+import com.example.demo.dto.*;
 import com.example.demo.exception.AccessDeniedException;
 import com.example.demo.model.Playlist;
 import com.example.demo.model.User;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/playlists")
 @RestController
@@ -55,11 +54,17 @@ public class PlaylistController {
 
         UpdatePlaylistResponseDto response = new UpdatePlaylistResponseDto(playlist.getDescription());
         return new ResponseEntity<>(response, HttpStatus.OK);
-
-        // Verificar se playlist existe - ok
-        // Verificar se playlist pertence ao usuário
-        // Atualizar
-        // Retornar
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<PlaylistResponseDto>> listPlaylists(Principal principal) {
+        User user = userService.loadUserByUsername(principal.getName());
+
+        List<PlaylistResponseDto> response = playlistService.listPlaylistsFromUser(user)
+                .stream()
+                .map((Playlist playlist) -> new PlaylistResponseDto(playlist.getId(), playlist.getDescription(), 0L))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
