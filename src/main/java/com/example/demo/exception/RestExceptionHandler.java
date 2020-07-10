@@ -39,6 +39,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(error);
     }
 
+    @ExceptionHandler(PlaylistNotFoundException.class)
+    protected  ResponseEntity<Object> handlePlaylistNotFound(PlaylistNotFoundException ex) {
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND);
+        error.setMessage(ex.getMessage());
+
+        return buildResponseEntity(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected  ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
+        ApiError error = new ApiError(HttpStatus.UNAUTHORIZED);
+        error.setMessage(ex.getMessage());
+
+        return buildResponseEntity(error);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,

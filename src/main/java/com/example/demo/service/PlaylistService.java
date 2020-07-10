@@ -1,11 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CreatePlaylistRequestDto;
+import com.example.demo.dto.UpdatePlaylistRequestDto;
+import com.example.demo.exception.PlaylistNotFoundException;
 import com.example.demo.model.Playlist;
 import com.example.demo.model.User;
 import com.example.demo.respository.PlaylistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,5 +23,20 @@ public class PlaylistService {
         playlistRepository.save(newPlaylist);
 
         return newPlaylist;
+    }
+
+    public Playlist getPlaylistById(Long id) {
+        Optional<Playlist> playlist = playlistRepository.findById(id);
+
+        return playlist.orElseThrow(() -> new PlaylistNotFoundException(id));
+    }
+
+    public Boolean isPlaylistOwnedByUser(Playlist playlist, User user) {
+        return playlist.getUser().getId().equals(user.getId());
+    }
+
+    public Playlist updatePlaylist(Playlist playlist, UpdatePlaylistRequestDto newData) {
+        playlist.setDescription(newData.getDescription());
+        return playlistRepository.save(playlist);
     }
 }
