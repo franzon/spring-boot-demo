@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,5 +52,9 @@ public class PlaylistService {
     public void addMusicToPlaylist(Playlist playlist, Music music) {
         playlist.getMusics().add(music);
         playlistRepository.save(playlist);
+    }
+
+    public List<Music> listMusicsFromPlaylist(Playlist playlist) {
+        return new ArrayList<>(playlist.getMusics());
     }
 }

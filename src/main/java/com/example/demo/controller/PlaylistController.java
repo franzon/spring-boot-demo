@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import com.example.demo.dto.AddMusicToPlaylistResponseDto;
 import com.example.demo.dto.CreatePlaylistRequestDto;
 import com.example.demo.dto.CreatePlaylistResponseDto;
+import com.example.demo.dto.MusicResponseDto;
 import com.example.demo.dto.PlaylistResponseDto;
 import com.example.demo.dto.UpdatePlaylistRequestDto;
 import com.example.demo.dto.UpdatePlaylistResponseDto;
@@ -106,5 +107,24 @@ public class PlaylistController {
         AddMusicToPlaylistResponseDto response = new AddMusicToPlaylistResponseDto(playlistId, musicId, new Date());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/musics")
+    public ResponseEntity<List<MusicResponseDto>> listMusicsFromPlaylist(@PathVariable("id") Long playlistId,
+            Principal principal) {
+
+        User user = userService.loadUserByUsername(principal.getName());
+
+        Playlist playlist = playlistService.getPlaylistById(playlistId);
+
+        if (!playlistService.isPlaylistOwnedByUser(playlist, user)) {
+            throw new AccessDeniedException();
+        }
+
+        List<MusicResponseDto> response = playlistService.listMusicsFromPlaylist(playlist).stream()
+                .map((Music music) -> new MusicResponseDto(music.getId(), music.getName(), music.getRating()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
