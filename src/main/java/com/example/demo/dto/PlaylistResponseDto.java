@@ -8,5 +8,5 @@ import lombok.Getter;
 public class PlaylistResponseDto {
     private Long id;
     private String description;
-    private Long musicCount;
+    private Integer musicCount;
 }

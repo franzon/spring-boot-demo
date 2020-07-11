@@ -80,7 +80,8 @@ public class PlaylistController {
         User user = userService.loadUserByUsername(principal.getName());
 
         List<PlaylistResponseDto> response = playlistService.listPlaylistsFromUser(user).stream()
-                .map((Playlist playlist) -> new PlaylistResponseDto(playlist.getId(), playlist.getDescription(), 0L))
+                .map((Playlist playlist) -> new PlaylistResponseDto(playlist.getId(), playlist.getDescription(),
+                        playlist.getMusics().size()))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
