@@ -1,6 +1,8 @@
 package com.example.demo.exception;
 
-import com.example.demo.model.Music;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -13,17 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "Malformed JSON request";
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
     }
@@ -41,7 +38,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PlaylistNotFoundException.class)
-    protected  ResponseEntity<Object> handlePlaylistNotFound(PlaylistNotFoundException ex) {
+    protected ResponseEntity<Object> handlePlaylistNotFound(PlaylistNotFoundException ex) {
         ApiError error = new ApiError(HttpStatus.NOT_FOUND);
         error.setMessage(ex.getMessage());
 
@@ -49,7 +46,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MusicNotFoundException.class)
-    protected  ResponseEntity<Object> handleMusicNotFound(MusicNotFoundException ex) {
+    protected ResponseEntity<Object> handleMusicNotFound(MusicNotFoundException ex) {
         ApiError error = new ApiError(HttpStatus.NOT_FOUND);
         error.setMessage(ex.getMessage());
 
@@ -57,7 +54,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    protected  ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
+    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
         ApiError error = new ApiError(HttpStatus.UNAUTHORIZED);
         error.setMessage(ex.getMessage());
 
@@ -66,16 +63,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST);
         error.setMessage("Invalid method argument");
 
-
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(x -> x.getDefaultMessage())
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
                 .collect(Collectors.toList());
 
         error.setSubErrors(errors);

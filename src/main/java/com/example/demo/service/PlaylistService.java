@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.example.demo.dto.CreatePlaylistRequestDto;
 import com.example.demo.dto.UpdatePlaylistRequestDto;
 import com.example.demo.exception.PlaylistNotFoundException;
@@ -7,11 +10,10 @@ import com.example.demo.model.Music;
 import com.example.demo.model.Playlist;
 import com.example.demo.model.User;
 import com.example.demo.respository.PlaylistRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

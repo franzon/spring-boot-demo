@@ -1,17 +1,19 @@
 package com.example.demo.service;
 
+import java.text.MessageFormat;
+import java.util.Optional;
+
 import com.example.demo.dto.SignUpRequestDto;
 import com.example.demo.exception.EmailAlreadyUsedException;
 import com.example.demo.model.User;
 import com.example.demo.respository.UserRepository;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

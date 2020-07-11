@@ -1,9 +1,9 @@
 package com.example.demo.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor

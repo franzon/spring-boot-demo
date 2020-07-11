@@ -1,8 +1,8 @@
 package com.example.demo.dto;
 
-import lombok.Getter;
-
 import javax.validation.constraints.NotBlank;
+
+import lombok.Getter;
 
 @Getter
 public class UpdatePlaylistRequestDto {
